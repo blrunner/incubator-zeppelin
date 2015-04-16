@@ -36,8 +36,8 @@ import org.apache.zeppelin.scheduler.SchedulerFactory;
 public class TajoInterpreter extends Interpreter {
   private Logger logger = LoggerFactory.getLogger(TajoInterpreter.class);
 
-  private Connection jdbcConnection;
-  private Statement currentStatement;
+  private Connection connection;
+  private Statement statement;
   private Exception exceptionOnConnect;
 
   public static final String TAJO_JDBC_URI = "tajo.jdbc.uri";
@@ -57,12 +57,6 @@ public class TajoInterpreter extends Interpreter {
     super(property);
   }
 
-  /**
-   * This just will be used for test.
-   *
-   * @return
-   * @throws SQLException
-   */
   public Connection getJdbcConnection() throws SQLException {
     return DriverManager.getConnection(getProperty(TAJO_JDBC_URI));
   }
@@ -78,7 +72,7 @@ public class TajoInterpreter extends Interpreter {
       return;
     }
     try {
-      jdbcConnection = getJdbcConnection();
+      connection = getJdbcConnection();
       exceptionOnConnect = null;
       logger.info("Successfully created connection");
     }
@@ -91,15 +85,15 @@ public class TajoInterpreter extends Interpreter {
   @Override
   public void close() {
     try {
-      if (jdbcConnection != null) {
-        jdbcConnection.close();
+      if (connection != null) {
+        connection.close();
       }
     }
     catch (SQLException e) {
       logger.error("Cannot close connection", e);
     }
     finally {
-      jdbcConnection = null;
+      connection = null;
       exceptionOnConnect = null;
     }
   }
@@ -109,7 +103,7 @@ public class TajoInterpreter extends Interpreter {
       if (exceptionOnConnect != null) {
         return new InterpreterResult(Code.ERROR, exceptionOnConnect.getMessage());
       }
-      currentStatement = jdbcConnection.createStatement();
+      statement = connection.createStatement();
       StringBuilder msg = null;
       if (StringUtils.containsIgnoreCase(sql, "EXPLAIN ")) {
         //return the explain as text, make this visual explain later
@@ -119,7 +113,7 @@ public class TajoInterpreter extends Interpreter {
         msg = new StringBuilder("%table ");
       }
 
-      ResultSet res = currentStatement.executeQuery(sql);
+      ResultSet res = statement.executeQuery(sql);
       try {
         ResultSetMetaData md = res.getMetaData();
         for (int i = 1; i < md.getColumnCount() + 1; i++) {
@@ -140,10 +134,10 @@ public class TajoInterpreter extends Interpreter {
       finally {
         try {
           res.close();
-          currentStatement.close();
+          statement.close();
         }
         finally {
-          currentStatement = null;
+          statement = null;
         }
       }
 
@@ -164,14 +158,14 @@ public class TajoInterpreter extends Interpreter {
 
   @Override
   public void cancel(InterpreterContext context) {
-    if (currentStatement != null) {
+    if (statement != null) {
       try {
-        currentStatement.cancel();
+        statement.cancel();
       }
       catch (SQLException ex) {
       }
       finally {
-        currentStatement = null;
+        statement = null;
       }
     }
   }
