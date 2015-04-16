@@ -122,14 +122,5 @@
 </property>
 -->
 
-<!--
-<property>
-  <name>tajo.jdbc.uri</name>
-  <value>jdbc:tajo://<TajoMaster hostname>:<TajoMaster client rpc port>/<database name></value>
-  <description>The default TajoMaster client rpc port is 26002. Currently, Tajo does not support the concept of database and namespace. All tables are contained in default database. So, you don’t need to specify any database name.</description>
-</property>
-
--->
-
 </configuration>
 

@@ -35,7 +35,6 @@ import org.apache.zeppelin.scheduler.SchedulerFactory;
  */
 public class TajoInterpreter extends Interpreter {
   private Logger logger = LoggerFactory.getLogger(TajoInterpreter.class);
-  private int commandTimeOut = 600000;
 
   private Connection jdbcConnection;
   private Statement currentStatement;
@@ -148,8 +147,8 @@ public class TajoInterpreter extends Interpreter {
         }
       }
 
-      InterpreterResult rett = new InterpreterResult(Code.SUCCESS, msg.toString());
-      return rett;
+      InterpreterResult interpreterResult = new InterpreterResult(Code.SUCCESS, msg.toString());
+      return interpreterResult;
     }
     catch (SQLException ex) {
       logger.error("Can not run " + sql, ex);
