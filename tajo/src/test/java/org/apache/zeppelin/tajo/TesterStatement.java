@@ -21,6 +21,8 @@ package org.apache.zeppelin.tajo;
 import java.sql.*;
 
 /**
+ * This is borrowed from Apache Commons DBCP2.
+ *
  * A dummy {@link java.sql.Statement}, for testing purposes.
  */
 public class TesterStatement implements Statement {

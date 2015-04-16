@@ -24,6 +24,8 @@ import java.sql.RowIdLifetime;
 import java.sql.SQLException;
 
 /**
+ * This is borrowed from Apache Commons DBCP2.
+ *
  * Dummy {@link DatabaseMetaData} for testing purposes. Implements only those
  * methods required by the test cases.
  */

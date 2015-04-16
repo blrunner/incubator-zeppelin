@@ -24,6 +24,8 @@ import java.util.Properties;
 import java.util.concurrent.Executor;
 
 /**
+ * This is borrowed from Apache Commons DBCP2.
+ *
  * A dummy {@link java.sql.Connection}, for testing purposes.
  */
 public class TesterConnection implements Connection {

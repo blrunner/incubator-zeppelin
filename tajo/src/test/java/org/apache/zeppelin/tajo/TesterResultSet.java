@@ -26,6 +26,8 @@ import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 
 /**
+ * This is borrowed from Apache Commons DBCP2.
+ *
  * A dummy {@link java.sql.ResultSet}, for testing purposes.
  */
 public class TesterResultSet implements ResultSet {
